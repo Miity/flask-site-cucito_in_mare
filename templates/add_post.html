@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+<div class="alert alert-primary" role="alert">
+ {{ message }}
+</div>
+{% endfor %}
+
+
+<h1>Новий пост</h1>
+<form method="POST" class="col-6 ">
+<div class="mb-3">
+{{ form.hidden_tag() }}
+<p>{{ form.slug.label(class="form-label") }} {{ form.slug(class="form-control") }}</p>
+<p>{{ form.title.label(class="form-label") }} {{ form.title(class="form-control") }}</p> 
+<p>{{ form.body.label(class="form-label") }} {{ form.body(class="form-control", rows="5") }}</p> 
+<p>{{ form.submit(class="btn btn-primary") }}</p> 
+</div>
+</form>
+
+{% for post in all_posts %}
+	{{ post.id }}. {{ post.slug }} | <a href="{{ url_for('postdelete', id=post.id )}}">delete</a>  <br>
+{% endfor %}
+
+{% endblock %}

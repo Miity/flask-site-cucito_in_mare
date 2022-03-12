@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% include 'nav.html' %}
+
+{% block content %}
+<h1>Як ваше ім'я?</h1>
+<form class="col-6 ">
+<div class="mb-3">
+{{ form.hidden_tag() }}
+<p>{{ form.email.label(class="form-label") }} {{ form.email(class="form-control") }}</p>
+<p>{{ form.username.label(class="form-label") }} {{ form.username(class="form-control") }}</p> 
+<p>{{ form.submit(class="btn btn-primary") }}</p> 
+</div>
+</form>
+{% endblock %}

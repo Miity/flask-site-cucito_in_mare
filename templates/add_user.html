@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+<div class="alert alert-primary" role="alert">
+ {{ name }} - {{ message }}
+</div>
+{% endfor %}
+
+
+<h1>Як ваше ім'я?</h1>
+<form method="POST" class="col-6 ">
+<div class="mb-3">
+{{ form.hidden_tag() }}
+<p>{{ form.email.label(class="form-label") }} {{ form.email(class="form-control") }}</p>
+<p>{{ form.username.label(class="form-label") }} {{ form.username(class="form-control") }}</p> 
+<p>{{ form.submit(class="btn btn-primary") }}</p> 
+</div>
+</form>
+
+{% for user in all_users %}
+	{{ user.id }}. {{ user.username }} - {{ user.email }} | <a href="{{ url_for('userdelete', id=user.id )}}">delete</a>  <br>
+{% endfor %}
+
+{% endblock %}
