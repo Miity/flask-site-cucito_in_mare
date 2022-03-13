@@ -1,14 +1,21 @@
-from flask import Flask, render_template, flash
-from forms import UserForm, PostForm
+from config import Configuretion
+
+from flask import Flask, render_template, flash, request
+from forms import UserForm, PostForm 
+from flask_migrate import Migrate
 
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
+app.config.from_object(Configuretion)
 app.config['SECRET_KEY'] = 'qazzaq'
 #add database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+
 
 @app.route("/")
 def index():
@@ -22,12 +29,7 @@ def page_not_found(error):
 
 # def users
 
-#@app.route('/users', methods=['GET', 'POST'])
-#def users():
-#    form = UserForm()
-#    return render_template('add_user.html', form=form, )
-
-@app.route('/user/add', methods=['GET','POST'])
+@app.route('/user/add', methods=['GET','POST'], )
 def add_user():
     name = None
     form = UserForm()
@@ -47,6 +49,23 @@ def add_user():
 
     return render_template('add_user.html', form=form, name=name, all_users=Users.query.all() )
 
+@app.route('/user/update/<int:id>', methods=['GET','POST'])
+def update_user(id):
+    form = UserForm()
+    user_to_update = Users.query.get_or_404(id)
+    if request.method == "POST":
+        user_to_update.username = form.username.data       
+        user_to_update.email = form.email.data 
+        try:
+            db.session.commit()
+            flash("User updadet succesfully")
+            return render_template('update_user.html', form=form, user_to_update=user_to_update,  all_users=Users.query.all() )
+        except:
+            flash("User updadet error")
+            return render_template('update_user.html', form=form, user_to_update=user_to_update,  all_users=Users.query.all() )
+    else:
+        return render_template('update_user.html', name=user_to_update.username, form=form, user_to_update=user_to_update,  all_users=Users.query.all() )
+
 @app.route('/user/<int:id>')
 def userdelete(id):
     name = None
@@ -63,11 +82,6 @@ def userdelete(id):
 
 
 # def post
-
-#@app.route('/posts/add_new', methods=['GET', 'POST'])
-#def new_post():
-#    form = PostForm()
-#    return render_template('add_post.html', form=form, all_post=Post.query.all())
 
 @app.route('/posts/add_post', methods=['GET', 'POST'])
 def add_post():
