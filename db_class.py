@@ -1,3 +1,0 @@
-
-from hello import db
-
