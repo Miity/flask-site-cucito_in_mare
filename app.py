@@ -10,12 +10,14 @@ app = Flask(__name__)
 app.config.from_object(Configuration)
 db = SQLAlchemy(app)
 
-from bp_posts.blueprint import posts
+
 
 migrate = Migrate(app, db)
 ckeditor = CKEditor(app)
 
+from bp_posts.blueprint import posts
 app.register_blueprint(posts, url_prefix='/blog')
+
 
 
 

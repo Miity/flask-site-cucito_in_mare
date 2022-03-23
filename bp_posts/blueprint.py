@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, flash, request, redirect, url_for
 from .forms import PostForm
 from models import Post
 from flask_security import login_required
-from flask_ckeditor import upload_success, upload_fail
 
 
 from app import db
@@ -10,16 +9,14 @@ from app import db
 
 posts = Blueprint('posts', __name__, template_folder='templates')
 
-
 @posts.route('/')
 def index():
     posts = Post.query.all()
     return render_template('posts_admin/index.html', posts=posts)
 
-
 @posts.route('/<slug>')
 def detail_post(slug):
-    post = Post.query.filter(Post.slug == str(slug)).first()
+    post = Post.query.filter(Post.slug==str(slug)).first()
     return render_template('posts_admin/detail_post.html', post=post)
 
 
@@ -85,21 +82,3 @@ def delete_post(id):
             'posts.index',
             posts=Post.query.all())
         )
-
-
-@app.route('/files/<path:filename>')
-def uploaded_files(filename):
-    path = '/upload/images/'
-    return send_from_directory(path, filename)
-
-
-@app.route('/upload', methods=['POST'])
-def upload():
-    f = request.files.get('upload')
-    # Add more validations here
-    extension = f.filename.split('.')[-1].lower()
-    if extension not in ['jpg', 'gif', 'png', 'jpeg']:
-        return upload_fail(message='Image only!')
-    f.save(os.path.join('/upload/images/', f.filename))
-    url = url_for('uploaded_files', filename=f.filename)
-    return upload_success(url, filename=f.filename)
