@@ -8,6 +8,6 @@ from flask_ckeditor import CKEditorField
 class PostForm(FlaskForm):
     slug = StringField('Slug')
     title = StringField('Title')
-    #body = StringField('Body Text', widget=TextArea())
+    short_desc = StringField('short_desc', widget=TextArea())
     body = CKEditorField('Body', widget=TextArea())
     submit = SubmitField('Submit')

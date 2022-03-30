@@ -18,7 +18,8 @@
 		<div class="mb-3">
 			{{ form.hidden_tag() }}
 			<p>{{ form.slug.label(class="form-label") }} {{ form.slug(class="form-control") }}</p>
-			<p>{{ form.title.label(class="form-label") }} {{ form.title(class="form-control") }}</p> 
+			<p>{{ form.title.label(class="form-label") }} {{ form.title(class="form-control") }}</p>
+      <p>{{ form.short_desc.label(class="form-label") }} {{ form.short_desc(class="form-control") }}</p> 
 			<p>{{ form.body.label(class="form-label") }} {{ form.body() }}</p> 
 			<p>{{ form.submit(class="btn btn-primary") }}</p> 
 		</div>

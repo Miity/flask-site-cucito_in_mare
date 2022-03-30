@@ -44,6 +44,7 @@ class Post(db.Model, RoleMixin):
     id = db.Column(db.Integer, primary_key=True)
     slug = db.Column(db.String(80), unique=True)
     title = db.Column(db.String(80), nullable=False)
+    short_desc = db.Column(db.String(250), nullable=True)
     body = db.Column(db.Text, nullable=False)
     pub_date = db.Column(db.DateTime, nullable=False,
                          default=datetime.utcnow)
