@@ -36,6 +36,9 @@ class Role(db.Model, RoleMixin):
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
+    def __repr__(self):
+        return '<Role %r>' % self.name
+
 
 class Post(db.Model, RoleMixin):
     id = db.Column(db.Integer, primary_key=True)
