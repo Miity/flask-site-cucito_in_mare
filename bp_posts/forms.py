@@ -5,10 +5,6 @@ from wtforms.widgets import TextArea
 from flask_ckeditor import CKEditorField
 
 
-def enabled_tags():
-    return Tag.query.all()
-
-
 class PostForm(FlaskForm):
     slug = StringField('Slug')
     title = StringField('Title')

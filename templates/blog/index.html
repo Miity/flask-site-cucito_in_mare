@@ -12,18 +12,26 @@
     </div>
 
     {% if posts %}
-    <div class="row align-items-md-stretch">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
     {% for post in posts %}
     
-      <div class="col-md-6 py-1">
-        <div class="h-100 p-5 text-white bg-dark rounded-3">
+      <div class="col">
+        <div class="card shadow-sm">
+		<div height="225"></div>
+		<div class="card-body">
           <h2>{{ post.title }}</h2>
-          <p>{{ post.body|truncate(200)|safe}}</p>
+          <p class="card-text">{{ post.body|truncate(200)|safe}}</p>
+	  <div class="d-flex justify-content-between align-items-center">
+		  <div class="btn-group">
+          <a href="{{ url_for('posts.detail_post', slug=post.slug)}}" class="btn btn-sm btn-outline-secondary" type="button">more...</a>
+       		
 
-          <a href="{{ url_for('posts.detail_post', slug=post.slug)}}" class="btn btn-outline-light" type="button">more...</a>
-        </div>
+
+		  </div>
+	  </div>
       </div>
-      
+	</div>
+      </div>
     {% endfor %}
     </div>
     {% endif %}

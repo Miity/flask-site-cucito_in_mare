@@ -1,10 +1,10 @@
 from app import app, db
-from flask import render_template, flash, request
+from flask import render_template, flash, request, url_for
 from forms import UserForm
 from models import Users
 from flask_security import login_required
 from models import Post
-
+import os
 
 @app.route("/")
 def index():
@@ -35,7 +35,7 @@ def all_users():
     return render_template('users/users.html', users=users)
 
 
-@app.route('/users/create_user', methods=['GET', 'POST'], )
+@app.route('/users/create_user', methods=['GET', 'POST'])
 @login_required
 def create_user():
     name = None
@@ -88,3 +88,33 @@ def userdelete(id):
     except:
         flash('error')
         return render_template('add_user.html', form=form, name=name)
+
+
+
+from flask_ckeditor import upload_success, upload_fail
+
+
+@app.route('/files/<path:filename>')
+def uploaded_files(filename):
+    path = os.path.join(app.config['UPLOAD_FOLDER'],'ckeditor')
+    return send_from_directory(path, filename)
+
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    f = request.files.get('upload')
+    # Add more validations here
+    extension = f.filename.split('.')[-1].lower()
+    if extension not in ['jpg', 'gif', 'png', 'jpeg']:
+        return upload_fail(message='Image only!')
+    f.save(os.path.join(app.config['UPLOAD_FOLDER'],'ckeditor', f.filename))
+    url = url_for('uploaded_files', filename=f.filename)
+    return upload_success(url, filename=f.filename)  # return upload_success call
+
+
+
+
+
+
+
+

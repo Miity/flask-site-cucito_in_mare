@@ -22,14 +22,11 @@
     <main>
       {% include 'nav.html' %}
       {% block header %}{% endblock %}
-      
-      
+     
       <div class="container p-4">
         {% block content %}{% endblock %}
       
-      {% include 'footer.html' %}
-
-        
+        {% include 'footer.html' %} 
       </div>
     </main>
     {% include 'js.html' %}    
