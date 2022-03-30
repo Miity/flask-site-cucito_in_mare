@@ -13,8 +13,11 @@
       <img src="..." class="card-img-top" alt="{{ post.title }}" height="200px">
       <div class="card-body">
         <h2>{{ post.title }}</h2>
-        <p class="card-text">{{ post.body|truncate(200)|safe}}</p>
-        
+        {% if post.short_desc %}
+          <p class="card-text">{{ post.short_desc}}</p>
+        {% else %}
+          <p class="card-text">{{ post.body|truncate(200)|safe}}</p>
+        {% endif %}
       </div>
     </div>
   </div>

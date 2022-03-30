@@ -1,11 +1,9 @@
-from app import db
+from app import db, app
 from datetime import datetime
-import re
 import os
 from slugify import slugify
 
 from flask_security import UserMixin, RoleMixin
-from flask_ckeditor import CKEditorField
 
 
 roles_users = db.Table('roles_users',
@@ -45,17 +43,18 @@ class Post(db.Model, RoleMixin):
     slug = db.Column(db.String(80), unique=True)
     title = db.Column(db.String(80), nullable=False)
     short_desc = db.Column(db.String(250), nullable=True)
-    body = db.Column(db.Text, nullable=False)
+    body = db.Column(db.Text, nullable=True)
     pub_date = db.Column(db.DateTime, nullable=False,
                          default=datetime.utcnow)
-    pic = db.Column(db.String(80), nullable=True)
+    thumbnail = db.Column(db.String(80), nullable=True)
 
-    def path_to_files(self):
+    def path_to_save(self):
         path = str(os.path.join(app.config['UPLOAD_FOLDER'], 'posts', str(self.slug)))
         return path
 
-    def path_to_pic(self):
-        path = str(os.path.join(path, pic))
+    def path_to_thumbnail(self):
+        path = str(os.path.join(app.config['UPLOAD_FOLDER'], 'posts', str(self.slug)))
+        path = str(os.path.join(path, self.thumbnail))
         return path
 
     def generate_slug(self):

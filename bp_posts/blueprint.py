@@ -2,7 +2,8 @@ from flask import Blueprint, render_template, flash, request, redirect, url_for
 from .forms import PostForm
 from models import Post
 from flask_security import login_required
-
+from werkzeug.utils import secure_filename
+import os
 
 from app import db
 
@@ -31,6 +32,16 @@ def create_post():
                         title=form.title.data, body=form.body.data)
             db.session.add(post)
             db.session.commit()
+
+            post = Post.query.filter_by(slug=form.slug.data).first()
+            f = form.thumbnail.data
+            filename = secure_filename(f.filename)
+            os.mkdir(post.path_to_save())
+            f.save(os.path.join(post.path_to_save(), filename))
+
+            post.thumbnail = filename
+            db.session.commit()
+            
             flash('Post added succefully')
 
             # Clear the form
