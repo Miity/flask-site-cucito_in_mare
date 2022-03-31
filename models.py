@@ -49,7 +49,7 @@ class Post(db.Model, RoleMixin):
     thumbnail = db.Column(db.String(80), nullable=True)
 
     def path_to_save(self):
-        path = str(os.path.join(app.config['UPLOAD_FOLDER'], 'posts', str(self.slug)))
+        path = str(os.path.join('static', 'upload', 'posts', str(self.slug)))
         return path
 
     def path_to_thumbnail(self):
