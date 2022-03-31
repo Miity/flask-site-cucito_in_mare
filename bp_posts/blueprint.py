@@ -34,11 +34,12 @@ def create_post():
             db.session.commit()
 
             post = Post.query.filter_by(slug=form.slug.data).first()
+            ###### SAVE FILE
             f = form.thumbnail.data
             filename = secure_filename(f.filename)
-            os.mkdir(post.path_to_save())
+            os.mkdir(post.path_to_save(), 0o755)
             f.save(os.path.join(post.path_to_save(), filename))
-
+            ###### commit filename in db
             post.thumbnail = filename
             db.session.commit()
             
