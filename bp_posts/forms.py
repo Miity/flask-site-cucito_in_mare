@@ -6,9 +6,8 @@ from flask_wtf.file import FileField, FileRequired
 
 
 class PostForm(FlaskForm):
-    slug = StringField('Slug')
-    title = StringField('Title')
+    title = StringField('Title', validators=[FileRequired()])
     short_desc = StringField('short_desc', widget=TextArea())
     body = CKEditorField('Body', widget=TextArea())
-    thumbnail = FileField('Thumbnail',validators=[FileRequired()])
+    thumbnail = FileField('Thumbnail')
     submit = SubmitField('Submit')

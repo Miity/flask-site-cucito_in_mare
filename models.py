@@ -53,14 +53,19 @@ class Post(db.Model, RoleMixin):
         return path
 
     def path_to_thumbnail(self):
-        path = str(os.path.join(app.config['UPLOAD_FOLDER'], 'posts', str(self.slug)))
+        path = str(os.path.join(
+            app.config['UPLOAD_FOLDER'], 'posts', str(self.slug)))
         path = str(os.path.join(path, self.thumbnail))
         return path
-
-    def generate_slug(self):
-        if self.slug:
-            self.slug = slugify(self.slug)
 
     def __repr__(self):
         return '<Post %r>' % self.title
 
+    def __init__(self, **kwargs):
+        if 'slug' == '':
+            kwargs['slug'] = slugify(kwargs.get('title'))
+        elif 'slug' not in kwargs:
+            kwargs['slug'] = slugify(kwargs.get('title'))
+        else:
+            kwargs['slug'] = slugify(kwargs.get('slug'))
+        super(Post, self).__init__(**kwargs)

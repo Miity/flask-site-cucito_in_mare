@@ -4,6 +4,8 @@ from models import Post
 from flask_security import login_required
 from werkzeug.utils import secure_filename
 import os
+from slugify import slugify
+
 
 from app import db
 
@@ -26,18 +28,17 @@ def detail_post(slug):
 def create_post():
     form = PostForm()
     if form.validate_on_submit():
-        post_slug = Post.query.filter_by(slug=form.slug.data).first()
+        post_slug = Post.query.filter_by(slug=slugify(form.title.data)).first()
         if post_slug is None:
-            post = Post(slug=form.slug.data,
-                        title=form.title.data, body=form.body.data)
+            post = Post(title=form.title.data, body=form.body.data)
             db.session.add(post)
             db.session.commit()
 
-            post = Post.query.filter_by(slug=form.slug.data).first()
+            post = Post.query.filter_by(slug=slugify(form.title.data)).first()
             ###### SAVE FILE
             f = form.thumbnail.data
             filename = secure_filename(f.filename)
-            os.mkdir(post.path_to_save(), 0o755)
+            os.mkdir(post.path_to_save())
             f.save(os.path.join(post.path_to_save(), filename))
             ###### commit filename in db
             post.thumbnail = filename
@@ -46,7 +47,6 @@ def create_post():
             flash('Post added succefully')
 
             # Clear the form
-            form.slug.data = ''
             form.title.data = ''
             form.body.data = ''
         else:
