@@ -36,13 +36,14 @@ def create_post():
 
             post = Post.query.filter_by(slug=slugify(form.title.data)).first()
             ###### SAVE FILE
-            f = form.thumbnail.data
-            filename = secure_filename(f.filename)
-            os.mkdir(post.path_to_save())
-            f.save(os.path.join(post.path_to_save(), filename))
-            ###### commit filename in db
-            post.thumbnail = filename
-            db.session.commit()
+            if form.thumbnail.data:
+                f = form.thumbnail.data
+                filename = secure_filename(f.filename)
+                os.mkdir(post.path_to_save())
+                f.save(os.path.join(post.path_to_save(), filename))
+                ###### commit filename in db
+                post.thumbnail = filename
+                db.session.commit()
             
             flash('Post added succefully')
 

@@ -52,9 +52,6 @@ class Post(db.Model, RoleMixin):
         path = str(os.path.join('static', 'upload', 'posts', str(self.slug)))
         return path
 
-    def generate_slug(self):
-        self.slug = slugify(self.title)
-
     def path_to_thumbnail(self):
         path = str(os.path.join(
             app.config['UPLOAD_FOLDER'], 'posts', str(self.slug)))
