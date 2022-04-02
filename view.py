@@ -8,12 +8,8 @@ import os
 
 @app.route("/")
 def index():
-    q = request.args.get('q',)
-    if q:
-        posts = Post.query.filter(Post.title.contains(q) | Post.body.contains(q)).all()
-    else:
-        posts = Post.query.all()
-    return render_template("blog/index.html", posts=posts)
+    posts = Post.query.all()
+    return render_template("blog/index.html", all_posts=posts)
 
 
 @app.errorhandler(404)

@@ -4,13 +4,15 @@
 
 {% block content %}
 
-{% if posts %}
+{% if all_posts %}
 <div class="row row-cols-1 row-cols-md-3 g-4">
-  {% for post in posts %}
+  {% for post in all_posts %}
 
   <div class="col">
     <div class="card  h-100">
-      <img src="..." class="card-img-top" alt="{{ post.title }}" height="200px">
+      {% if post.thumbnail %}
+      <img src="{{ post.path_to_thumbnail() }}" class="card-img-top" alt="{{ post.title }}" height="200px">
+      {% endif %}
       <div class="card-body">
         <h2>{{ post.title }}</h2>
         {% if post.short_desc %}
@@ -18,6 +20,8 @@
         {% else %}
           <p class="card-text">{{ post.body|truncate(200)|safe}}</p>
         {% endif %}
+        </br>
+        <a href="{{ url_for('posts.detail_post', slug=post.slug)}}">more...</a>
       </div>
     </div>
   </div>

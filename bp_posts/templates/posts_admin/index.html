@@ -26,9 +26,8 @@
   </thead>
 <tbody>
 
-
 {% for post in posts %}
-	
+	{% if post.archive != True %}
     <tr>
       <td>{{ post.id }}</td>
       <td>{{ post.slug }}</td>
@@ -54,8 +53,61 @@
         </a>
     	</td>
     </tr>
-
+  {% endif %}
 {% endfor %}
+</tbody>
+</table>
+
+</br>
+
+
+<h2> Archive </h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">slug</th>
+      <th scope="col">title</th>
+    </tr>
+  </thead>
+<tbody>
+{% for post in posts %}
+  {% if post.archive == True %}
+    <tr>
+      <td>{{ post.id }}</td>
+      <td>{{ post.slug }}</td>
+      <td>{{ post.title }}</td>
+      <td>
+        {% if post.thumbnail %}
+        <img src="{{ post.path_to_thumbnail() }}" height="30px">
+        {% endif %}
+      </td>
+      <td>
+          <a type="button" class="btn btn-success" href="{{ url_for('posts.publish', id=post.id ) }}">
+                publish post
+          </a>
+
+          <a type="button" class="btn btn-success" href="{{ url_for('posts.detail_post', slug=post.slug ) }}">
+                
+                view post
+          </a>
+
+          <a type="button" class="btn btn-success" href="{{ url_for('posts.edit_post', id=post.id ) }}">
+                
+                edit
+          </a>
+     
+        <a type="button" class="btn btn-outline-danger" href="{{ url_for('posts.delete_post', id=post.id ) }}">
+               
+                delete
+        </a>
+      </td>
+    </tr>
+  {% endif %}
+{% endfor %}
+
+
+
 </tbody>
 </table>
 

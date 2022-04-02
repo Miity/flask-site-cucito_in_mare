@@ -47,6 +47,7 @@ class Post(db.Model, RoleMixin):
     pub_date = db.Column(db.DateTime, nullable=False,
                          default=datetime.utcnow)
     thumbnail = db.Column(db.String(80), nullable=True)
+    archive = db.Column(db.Boolean)
 
     def path_to_save(self):
         path = str(os.path.join('static', 'upload', 'posts', str(self.slug)))

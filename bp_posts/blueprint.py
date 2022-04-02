@@ -75,23 +75,43 @@ def edit_post(id):
     return render_template('posts_admin/edit_post.html', post=post, form=form, posts=Post.query.all())
 
 
-@posts.route('/<int:id>/delete')
+@posts.route('/delete/<int:id>')
 @login_required
 def delete_post(id):
     form = PostForm()
     post_delete = Post.query.get_or_404(id)
-    try:
-        db.session.delete(post_delete)
-        db.session.commit()
-        flash("post deleted")
-        return redirect(url_for(
-            'posts.index',
-            posts=Post.query.all())
-        )
+    if post_delete.archive == True:
+        try:
+            db.session.delete(post_delete)
+            db.session.commit()
+            flash("post deleted")
+            return redirect(url_for(
+                'posts.index',
+                posts=Post.query.all())
+            )
 
-    except:
-        flash('error')
+        except:
+            flash('error')
+            return redirect(url_for(
+                'posts.index',
+                posts=Post.query.all())
+            )
+    else:
+        post_delete.archive = True
+        db.session.commit()
         return redirect(url_for(
-            'posts.index',
-            posts=Post.query.all())
-        )
+                'posts.index',
+                posts=Post.query.all())
+            )
+
+@posts.route('/publish/<int:id>')
+@login_required
+def publish(id):
+    post = Post.query.get_or_404(id)
+    post.archive = False
+    db.session.commit()
+    return redirect(url_for(
+                'posts.index',
+                posts=Post.query.all())
+
+            )
