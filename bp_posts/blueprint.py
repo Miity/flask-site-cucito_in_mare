@@ -5,22 +5,25 @@ from flask_security import login_required
 from werkzeug.utils import secure_filename
 import os
 from slugify import slugify
+from utils import save_img
 
 
 from app import db
 
-
 posts = Blueprint('posts', __name__, template_folder='templates')
+
 
 @posts.route('/')
 def index():
     posts = Post.query.all()
     return render_template('posts_admin/index.html', posts=posts)
 
+
 @posts.route('/<slug>')
 def detail_post(slug):
-    post = Post.query.filter(Post.slug==str(slug)).first()
-    return render_template('posts_admin/detail_post.html', post=post)
+    post = Post.query.filter(Post.slug == str(slug)).first()
+    if post.archive != True:
+        return render_template('posts_admin/detail_post.html', post=post)
 
 
 @posts.route('/create', methods=['GET', 'POST'])
@@ -35,16 +38,15 @@ def create_post():
             db.session.commit()
 
             post = Post.query.filter_by(slug=slugify(form.title.data)).first()
-            ###### SAVE FILE
+            # SAVE FILE
             if form.thumbnail.data:
-                f = form.thumbnail.data
-                filename = secure_filename(f.filename)
-                os.mkdir(post.path_to_save())
-                f.save(os.path.join(post.path_to_save(), filename))
-                ###### commit filename in db
+                save_img(form.thumbnail.data, post.path_to_save())
+                # commit filename in db
+                filename = secure_filename(form.thumbnail.data.filename)
                 post.thumbnail = filename
                 db.session.commit()
-            
+
+
             flash('Post added succefully')
 
             # Clear the form
@@ -100,9 +102,10 @@ def delete_post(id):
         post_delete.archive = True
         db.session.commit()
         return redirect(url_for(
-                'posts.index',
-                posts=Post.query.all())
-            )
+            'posts.index',
+            posts=Post.query.all())
+        )
+
 
 @posts.route('/publish/<int:id>')
 @login_required
@@ -111,7 +114,6 @@ def publish(id):
     post.archive = False
     db.session.commit()
     return redirect(url_for(
-                'posts.index',
-                posts=Post.query.all())
-
-            )
+        'posts.index',
+        posts=Post.query.all())
+    )

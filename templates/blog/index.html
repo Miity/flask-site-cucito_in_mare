@@ -4,20 +4,39 @@
 
 {% block content %}
 
+<div class="row">
+  <div class="container">
+    <div class="p-5 mb-4 bg-light rounded-3 " style="background-image: url('static/upload/main_set/logo.jpg');
+  background-repeat: no-repeat; background-size: cover;">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/Syc6pCqvKXQ?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>  
+    </div>
+  </div>
+</div>
+
+{% if tags %}
+<ul class="nav justify-content-center my-5">
+  {% for tag in tags %}
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="#">{{ tag.name}}</a>
+    </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
 {% if all_posts %}
 <div class="row row-cols-1 row-cols-md-3 g-4">
   {% for post in all_posts %}
 
-  <div class="col">
-    <div class="card  h-100">
+  <div class="col ">
+    <div class="card bg-light h-100">
       {% if post.thumbnail %}
-      <img src="{{ post.path_to_thumbnail() }}" class="card-img-top" alt="{{ post.title }}" height="200px">
+      <img src="{{ post.path_to_thumbnail() }}" class="card-img-top" alt="{{ post.title }}">
       {% endif %}
       <div class="card-body">
         <h2>{{ post.title }}</h2>
         {% if post.short_desc %}
           <p class="card-text">{{ post.short_desc}}</p>
-        {% else %}
+        {% elif post.body%}
           <p class="card-text">{{ post.body|truncate(200)|safe}}</p>
         {% endif %}
         </br>

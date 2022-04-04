@@ -3,13 +3,15 @@ from flask import render_template, flash, request, url_for
 from forms import UserForm
 from models import Users
 from flask_security import login_required
-from models import Post
+from models import Post, Tag
 import os
+
 
 @app.route("/")
 def index():
-    posts = Post.query.all()
-    return render_template("blog/index.html", all_posts=posts)
+    tags = Tag.query.all()
+    posts = Post.query.filter_by(archive=False).all()
+    return render_template("blog/index.html", all_posts=posts, tags=tags)
 
 
 @app.errorhandler(404)
@@ -51,25 +53,6 @@ def create_user():
     return render_template('users/create_user.html', form=form, name=name, all_users=Users.query.all())
 
 
-@app.route('/user/update/<int:id>', methods=['GET', 'POST'])
-@login_required
-def update_user(id):
-    form = UserForm()
-    user_to_update = Users.query.get_or_404(id)
-    if request.method == "POST":
-        user_to_update.username = form.username.data
-        user_to_update.email = form.email.data
-        try:
-            db.session.commit()
-            flash("User updadet succesfully")
-            return render_template('update_user.html', form=form, user_to_update=user_to_update, all_users=Users.query.all())
-        except:
-            flash("User updadet error")
-            return render_template('update_user.html', form=form, user_to_update=user_to_update, all_users=Users.query.all())
-    else:
-        return render_template('update_user.html', name=user_to_update.username, form=form, user_to_update=user_to_update, all_users=Users.query.all())
-
-
 @app.route('/user/<int:id>')
 @login_required
 def userdelete(id):
@@ -86,14 +69,12 @@ def userdelete(id):
         return render_template('add_user.html', form=form, name=name)
 
 
-
-
 from flask_ckeditor import upload_success, upload_fail
 
 
 @app.route('/files/<path:filename>')
 def uploaded_files(filename):
-    path = os.path.join(app.config['UPLOAD_FOLDER'],'ckeditor')
+    path = os.path.join(app.config['UPLOAD_FOLDER'], 'ckeditor')
     return send_from_directory(path, filename)
 
 
@@ -104,14 +85,7 @@ def upload():
     extension = f.filename.split('.')[-1].lower()
     if extension not in ['jpg', 'gif', 'png', 'jpeg']:
         return upload_fail(message='Image only!')
-    f.save(os.path.join(app.config['UPLOAD_FOLDER'],'ckeditor', f.filename))
+    f.save(os.path.join(app.config['UPLOAD_FOLDER'], 'ckeditor', f.filename))
     url = url_for('uploaded_files', filename=f.filename)
-    return upload_success(url, filename=f.filename)  # return upload_success call
-
-
-
-
-
-
-
-
+    # return upload_success call
+    return upload_success(url, filename=f.filename)

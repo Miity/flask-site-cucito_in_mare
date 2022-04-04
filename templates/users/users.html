@@ -6,17 +6,6 @@
 <div class="row justify-content-center">
 	<div class="col-8 ">
 
-<br><br>
-
-<a href="{{ url_for('create_user')}}" type="button" class="btn btn-success">
-</svg>
-
-                Новий юзер
-</a>
-<br>
-<br>
-<br>
-
 <table class="table">
   <thead>
     <tr>
@@ -41,14 +30,13 @@
             {{ role.name }}
           {% endfor %}
       </td>
-      <td><a type="button" class="btn btn-success" href="{{ url_for('update_user', id=user.id ) }}">
-                     edit
-         	</a>
-     
+      <td>
+      {% if user.username != 'admin' %}
       	<a type="button" class="btn btn-outline-danger" href="{{ url_for('userdelete', id=user.id ) }}">
                 
                 delete
         </a>
+      {% endif %}
     	</td>
     </tr>
 

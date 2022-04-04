@@ -2,7 +2,6 @@ from app import db, app
 from datetime import datetime
 import os
 from slugify import slugify
-
 from flask_security import UserMixin, RoleMixin
 
 
@@ -11,6 +10,14 @@ roles_users = db.Table('roles_users',
                            'users.id'), primary_key=True),
                        db.Column('role_id', db.Integer, db.ForeignKey(
                            'role.id'), primary_key=True)
+                       )
+
+
+post_tags = db.Table('post_tags',
+                       db.Column('post_id', db.Integer, db.ForeignKey(
+                           'post.id'), primary_key=True),
+                       db.Column('tag_id', db.Integer, db.ForeignKey(
+                           'tag.id'), primary_key=True)
                        )
 
 
@@ -24,7 +31,6 @@ class Users(db.Model, UserMixin):
                             backref=db.backref('users', lazy='dynamic'))
 
     # create a String
-
     def __repr__(self):
         return '<User %r>' % self.username
 
@@ -38,6 +44,15 @@ class Role(db.Model, RoleMixin):
         return '<Role %r>' % self.name
 
 
+class Tag(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+
+    def __repr__(self):
+        return '<Tag %r>' % self.name
+
+
 class Post(db.Model, RoleMixin):
     id = db.Column(db.Integer, primary_key=True)
     slug = db.Column(db.String(80), unique=True)
@@ -48,6 +63,8 @@ class Post(db.Model, RoleMixin):
                          default=datetime.utcnow)
     thumbnail = db.Column(db.String(80), nullable=True)
     archive = db.Column(db.Boolean)
+    tags = db.relationship('Tag', secondary=post_tags,
+                            backref=db.backref('post', lazy='dynamic'))
 
     def path_to_save(self):
         path = str(os.path.join('static', 'upload', 'posts', str(self.slug)))
@@ -63,5 +80,15 @@ class Post(db.Model, RoleMixin):
         return '<Post %r>' % self.title
 
     def __init__(self, **kwargs):
+        kwargs['archive'] = False
         kwargs['slug'] = slugify(kwargs.get('title'))
         super(Post, self).__init__(**kwargs)
+
+
+"""
+class SiteSet():
+    lang =
+    site_name = 
+    site_description =
+
+"""

@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import Form, BooleanField, StringField, PasswordField, validators, SubmitField
+from wtforms import StringField, validators, SubmitField
 from wtforms.validators import DataRequired, Email, Length
-from wtforms.widgets import TextArea
+from flask_wtf.file import FileField
 
 
 class UserForm(FlaskForm):
