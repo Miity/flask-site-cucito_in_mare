@@ -36,13 +36,12 @@
   {% for post in all_posts %}
 
   <div class="col ">
-    <div class="card bg-light h-100 filterDiv {{ post.tags[0].name }}">
+    <div class="card bg-light h-100 filterDiv {% if post.tags[0] %}{{ post.tags[0].name }} {% endif %}">
       {% if post.thumbnail %}
       <img src="{{ post.path_to_thumbnail() }}" class="card-img-top" alt="{{ post.title }}">
       {% endif %}
       <div class="card-body">
         <h2>{{ post.title }}</h2>
-        {{ post.tags[0].name }}
         {% if post.short_desc %}
           <p class="card-text">{{ post.short_desc}}</p>
         {% elif post.body%}
