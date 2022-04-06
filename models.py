@@ -88,6 +88,7 @@ class Post(db.Model, RoleMixin):
 """
 class SiteSet():
     lang =
+    logo =
     site_name = 
     site_description =
 

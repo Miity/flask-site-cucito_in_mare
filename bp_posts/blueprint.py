@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, request, redirect, url_for
 from .forms import PostForm
-from models import Post
+from models import Post, Tag
 from flask_security import login_required
 from werkzeug.utils import secure_filename
 import os
@@ -33,7 +33,10 @@ def create_post():
     if form.validate_on_submit():
         post_slug = Post.query.filter_by(slug=slugify(form.title.data)).first()
         if post_slug is None:
-            post = Post(title=form.title.data, body=form.body.data)
+            tag = Tag.query.filter_by(name=form.tags.data)
+            post = Post(title=form.title.data,
+                        body=form.body.data,
+                        short_desc=form.short_desc.data, tags=list(tag))
             db.session.add(post)
             db.session.commit()
 
@@ -45,7 +48,6 @@ def create_post():
                 filename = secure_filename(form.thumbnail.data.filename)
                 post.thumbnail = filename
                 db.session.commit()
-
 
             flash('Post added succefully')
 

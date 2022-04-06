@@ -35,8 +35,8 @@
 <div class="row row-cols-1 row-cols-md-3 g-4">
   {% for post in all_posts %}
 
-  <div class="col ">
-    <div class="card bg-light h-100 filterDiv {% if post.tags[0] %}{{ post.tags[0].name }} {% endif %}">
+  <div class="col filterDiv {% if post.tags[0] %}{{ post.tags[0].name }} {% endif %} ">
+    <div class="card bg-light h-100 ">
       {% if post.thumbnail %}
       <img src="{{ post.path_to_thumbnail() }}" class="card-img-top" alt="{{ post.title }}">
       {% endif %}
