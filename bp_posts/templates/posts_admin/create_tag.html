@@ -1,0 +1,35 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}admin{% endblock %}
+
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+<div class="alert alert-primary" role="alert">
+	{{ message }}
+</div>
+{% endfor %}
+
+
+<div class="row justify-content-center">
+<div class="col-8 ">
+
+
+<h1>Новий tag</h1>
+	<form method="POST" >
+		<div class="mb-3">
+			{{ form.hidden_tag() }}
+			<p>{{ form.name.label(class="form-label") }} {{ form.name(class="form-control") }}</p> 
+      <p>{{ form.desc.label(class="form-label") }} {{ form.desc(class="form-control") }}</p> 
+			<p>{{ form.submit(class="btn btn-primary") }}</p> 
+		</div>
+	</form>
+
+</div>
+</div>
+
+
+{% endblock %}
+
+
+
