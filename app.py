@@ -14,6 +14,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 ckeditor = CKEditor(app)
 
+
 from bp_posts.blueprint import posts
 app.register_blueprint(posts, url_prefix='/blog')
 

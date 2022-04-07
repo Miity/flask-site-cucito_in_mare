@@ -9,7 +9,7 @@ import os
 
 @app.route("/")
 def index():
-    tags = Tag.query.all()
+    tags = Tag.query.filter_by(archive=False).all()
     posts = Post.query.filter_by(archive=False).all()
     return render_template("blog/index.html", all_posts=posts, tags=tags)
 
@@ -69,6 +69,15 @@ def userdelete(id):
         return render_template('add_user.html', form=form, name=name)
 
 
+
+
+
+
+
+
+
+
+
 from flask_ckeditor import upload_success, upload_fail
 
 
@@ -89,3 +98,11 @@ def upload():
     url = url_for('uploaded_files', filename=f.filename)
     # return upload_success call
     return upload_success(url, filename=f.filename)
+
+
+'''
+@app.context_processor
+def utility_processor():
+    price = "price"
+    return dict(price=price)
+'''

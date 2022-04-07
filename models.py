@@ -14,11 +14,11 @@ roles_users = db.Table('roles_users',
 
 
 post_tags = db.Table('post_tags',
-                       db.Column('post_id', db.Integer, db.ForeignKey(
-                           'post.id'), primary_key=True),
-                       db.Column('tag_id', db.Integer, db.ForeignKey(
-                           'tag.id'), primary_key=True)
-                       )
+                     db.Column('post_id', db.Integer, db.ForeignKey(
+                         'post.id'), primary_key=True),
+                     db.Column('tag_id', db.Integer, db.ForeignKey(
+                         'tag.id'), primary_key=True)
+                     )
 
 
 class Users(db.Model, UserMixin):
@@ -46,11 +46,18 @@ class Role(db.Model, RoleMixin):
 
 class Tag(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
+    slug = db.Column(db.String(80), unique=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
+    archive = db.Column(db.Boolean)
 
     def __repr__(self):
-        return '<Tag %r>' % self.name
+        return self.name
+
+    def __init__(self, **kwargs):
+        kwargs['archive'] = False
+        kwargs['slug'] = slugify(kwargs.get('name'))
+        super(Tag, self).__init__(**kwargs)
 
 
 class Post(db.Model, RoleMixin):
@@ -64,7 +71,7 @@ class Post(db.Model, RoleMixin):
     thumbnail = db.Column(db.String(80), nullable=True)
     archive = db.Column(db.Boolean)
     tags = db.relationship('Tag', secondary=post_tags,
-                            backref=db.backref('post', lazy='dynamic'))
+                           backref=db.backref('post', lazy='dynamic'), cascade="all, delete")
 
     def path_to_save(self):
         path = str(os.path.join('static', 'upload', 'posts', str(self.slug)))
@@ -84,12 +91,9 @@ class Post(db.Model, RoleMixin):
         kwargs['slug'] = slugify(kwargs.get('title'))
         super(Post, self).__init__(**kwargs)
 
-
-"""
+'''
 class SiteSet():
-    lang =
-    logo =
-    site_name = 
-    site_description =
-
-"""
+    site_logo = db.Column(db.String(80), nullable=True)
+    site_name = db.Column(db.String(80), nullable=True)
+    site_description = db.Column(db.String(250), nullable=True)
+'''

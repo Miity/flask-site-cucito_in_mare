@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_admin.html' %}
 
 {% block title %}Create new Post{% endblock %}
 
@@ -18,9 +18,10 @@
 		<div class="mb-3">
 			{{ form.hidden_tag() }}
       <p>{{ form.thumbnail.label(class="form-label") }} {{ form.thumbnail(class="form-control") }}</p>
+      <p>{{ form.tags.label(class="form-label") }} {{ form.tags(class="form-select") }}</p> 
 			<p>{{ form.title.label(class="form-label") }} {{ form.title(class="form-control") }}</p>
       <p>{{ form.short_desc.label(class="form-label") }} {{ form.short_desc(class="form-control") }}</p> 
-      <p>{{ form.tags.label(class="form-label") }} {{ form.tags(class="form-select") }}</p> 
+      
 			<p>{{ form.body.label(class="form-label") }} {{ form.body() }}</p> 
 			<p>{{ form.submit(class="btn btn-primary") }}</p> 
 		</div>
@@ -28,31 +29,6 @@
   {{ ckeditor.load() }}
   {{ ckeditor.config(name='body') }}
 
-  <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">id</th>
-      <th scope="col">slug</th>
-      <th scope="col">title</th>
-    </tr>
-  </thead>
-<tbody>
-{% for post in posts %}
-	    <tr>
-      <td>{{ post.id }}</td>
-      <td>{{ post.slug }}</td>
-      <td>{{ post.title }}</td>
-      <td><a type="button" class="btn btn-success" href="{{ url_for('posts.edit_post', id=post.id ) }}">
-                edit
-         	</a>
-     
-      	<a type="button" class="btn btn-outline-danger" href="{{ url_for('posts.delete_post', id=post.id ) }}">
-                delete
-        </a>
-    	</td>
-    </tr>
-{% endfor %}
-</tbody>
 
 </div>
 

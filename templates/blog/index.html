@@ -13,11 +13,14 @@
   </div>
 </div>
 
-</br>
+
+
+
 
 {% if tags %}
 <!-- Control buttons -->
-<div class="row justify-content-sm-center">
+<div class="row justify-content-sm-center my-5">
+  <center>
   <div class="col">
     <button class="btn btn-outline-primary" onclick="filterSelection('all')">all</button>
   {% for tag in tags %}
@@ -26,10 +29,10 @@
 
   {% endfor %}  
   </div>
+  </center>
 </div>
 {% endif %}
 
-</br></br>
 
 {% if all_posts %}
 <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -45,10 +48,8 @@
         {% if post.short_desc %}
           <p class="card-text">{{ post.short_desc}}</p>
         {% elif post.body%}
-          <p class="card-text">{{ post.body|truncate(200)|safe}}</p>
+          <p class="card-text">{{ post.body|truncate(250)|safe}}</p>
         {% endif %}
-        </br>
-        <a href="{{ url_for('posts.detail_post', slug=post.slug)}}">more...</a>
       </div>
     </div>
   </div>

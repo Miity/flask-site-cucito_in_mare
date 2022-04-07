@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_admin.html' %}
 
 {% block title %}Show all posts{% endblock %}
 
@@ -6,15 +6,90 @@
 <div class="row justify-content-center">
 	<div class="col-10 ">
 
+{% for message in get_flashed_messages() %}
+<div class="alert alert-primary" role="alert">
+  {{ message }}
+</div>
+{% endfor %}
+
 <br><br>
 
 <a href="{{ url_for('posts.create_post')}}" type="button" class="btn btn-success">
                 
                 Новий пост
 </a>
+<a href="{{ url_for('posts.create_tag')}}" type="button" class="btn btn-success">
+                
+                Новий tag
+</a>
 <br>
 <br>
 <br>
+
+
+
+
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">slug</th>
+      <th scope="col">name</th>
+    </tr>
+  </thead>
+<tbody>
+
+{% for tag in tags %}
+  {% if tag.archive != True %}
+    <tr>
+      <td>{{ tag.id }}</td>
+      <td>{{ tag.slug }}</td>
+      <td>{{ tag.name }}</td>
+
+      <td>
+        <a type="button" class="btn btn-outline-danger" href="{{ url_for('posts.delete_tag', id=tag.id ) }}"> 
+                delete
+        </a>
+      </td>
+    </tr>
+  {% endif %}
+{% endfor %}
+
+{% for tag in tags %}
+  {% if tag.archive == True %}
+    <tr class="table-danger" >
+      <td>{{ tag.id }}</td>
+      <td>{{ tag.slug }}</td>
+      <td>{{ tag.name }}</td>
+
+      <td>
+        <a type="button" class="btn btn-success" href="{{ url_for('posts.publish_tag', id=tag.id ) }}">
+                publish post
+        </a>
+        <a type="button" class="btn btn-danger" href="{{ url_for('posts.delete_tag', id=tag.id ) }}"> 
+                delete
+        </a>
+      </td>
+    </tr>
+  {% endif %}
+{% endfor %}
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <table class="table">
   <thead>
@@ -43,11 +118,7 @@
         {% endif %}
       </td>
 
-      <td><a type="button" class="btn btn-success" href="{{ url_for('posts.detail_post', slug=post.slug ) }}">
-                
-                view post
-         	</a>
-
+      <td>
           <a type="button" class="btn btn-success" href="{{ url_for('posts.edit_post', id=post.id ) }}">
                 
                 edit
@@ -61,28 +132,18 @@
     </tr>
   {% endif %}
 {% endfor %}
-</tbody>
-</table>
 
-</br>
-
-
-<h2> Archive </h2>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">id</th>
-      <th scope="col">slug</th>
-      <th scope="col">title</th>
-    </tr>
-  </thead>
-<tbody>
 {% for post in posts %}
   {% if post.archive == True %}
-    <tr>
+    <tr class="table-danger" >
       <td>{{ post.id }}</td>
       <td>{{ post.slug }}</td>
       <td>{{ post.title }}</td>
+      <td>
+        {% if post.tags[0] %}
+          {{ post.tags[0].name }}
+        {% endif %}
+      </td>
       <td>
         {% if post.thumbnail %}
         <img src="{{ post.path_to_thumbnail() }}" height="30px">
@@ -98,7 +159,7 @@
                 edit
           </a>
      
-        <a type="button" class="btn btn-outline-danger" href="{{ url_for('posts.delete_post', id=post.id ) }}">
+        <a type="button" class="btn btn-danger" href="{{ url_for('posts.delete_post', id=post.id ) }}">
                
                 delete
         </a>
