@@ -16,7 +16,7 @@ ckeditor = CKEditor(app)
 
 
 from bp_posts.blueprint import posts
-app.register_blueprint(posts, url_prefix='/blog')
+app.register_blueprint(posts, url_prefix='/admin')
 
 
 ### Flask security ###

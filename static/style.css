@@ -12,9 +12,13 @@ body {
 
 
 
- a[type='button'] {
-   -webkit-appearance: none;
-   -moz-appearance: none;
-   appearance: none;
+a[type='button'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
 
- }
+.thumb{
+  max-height: 300px;  
+  object-fit: cover;
+}

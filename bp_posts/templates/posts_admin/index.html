@@ -114,7 +114,7 @@
       </td>
       <td>
         {% if post.thumbnail %}
-        <img src="{{ post.path_to_thumbnail() }}" height="30px">
+        <img src="{{ url_for('download_post_image', slug=post.slug ,filename=post.thumbnail) }}" height="30px">
         {% endif %}
       </td>
 

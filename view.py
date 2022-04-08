@@ -1,5 +1,5 @@
 from app import app, db
-from flask import render_template, flash, request, url_for
+from flask import render_template, flash, request, url_for, send_from_directory
 from forms import UserForm, SiteForm
 from models import Users
 from flask_security import login_required
@@ -78,6 +78,12 @@ def site_set():
         path_to_save = os.path.join(app.config['UPLOAD_FOLDER'], 'main_set')
         save_img(form.logo.data, path_to_save, 'logo.jpg')
     return render_template('blog/site_set.html', form=form)
+
+
+@app.route('/<path:slug>/<path:filename>')
+def download_post_image(slug, filename):
+    path = os.path.join(app.config['UPLOAD_FOLDER'], 'posts', slug)
+    return send_from_directory(path, filename, as_attachment=True)
 
 
 # Utils
