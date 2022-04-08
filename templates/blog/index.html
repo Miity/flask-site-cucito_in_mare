@@ -1,18 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}index title{% endblock %}
+{% block title %}Tappezzeria Nautica{% endblock %}
 
 {% block content %}
 
 <div class="row">
-  <div class="container">
-    <div class="p-5 mb-4 bg-light rounded-3 " style="background-image: url('static/upload/main_set/logo.jpg');
-  background-repeat: no-repeat; background-size: cover;">
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/Syc6pCqvKXQ?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>  
-    </div>
+  <div class="col">
+      <img src="static/upload/main_set/logo.jpg" class=".img-fluid.">
   </div>
 </div>
-
 
 
 
@@ -57,6 +53,10 @@
   {% endfor %}
 </div>
 {% endif %}
+
+
+
+
 
 
 

@@ -71,7 +71,7 @@ class Post(db.Model, RoleMixin):
     thumbnail = db.Column(db.String(80), nullable=True)
     archive = db.Column(db.Boolean)
     tags = db.relationship('Tag', secondary=post_tags,
-                           backref=db.backref('post', lazy='dynamic'), cascade="all, delete")
+                           backref=db.backref('post', lazy='dynamic'), cascade="save-update")
 
     def path_to_save(self):
         path = str(os.path.join('static', 'upload', 'posts', str(self.slug)))
