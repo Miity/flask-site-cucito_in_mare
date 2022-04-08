@@ -1,10 +1,11 @@
 from app import app, db
 from flask import render_template, flash, request, url_for
-from forms import UserForm
+from forms import UserForm, SiteForm
 from models import Users
 from flask_security import login_required
 from models import Post, Tag
 import os
+from utils import save_img
 
 
 @app.route("/")
@@ -69,15 +70,17 @@ def userdelete(id):
         return render_template('add_user.html', form=form, name=name)
 
 
+# Admin
+@app.route('/admin/site_set', methods=['GET', 'POST'])
+def site_set():
+    form = SiteForm()
+    if form.validate_on_submit():
+        path_to_save = os.path.join(app.config['UPLOAD_FOLDER'], 'main_set')
+        save_img(form.logo.data, path_to_save, 'logo.jpg')
+    return render_template('blog/site_set.html', form=form)
 
 
-
-
-
-
-
-
-
+# Utils
 from flask_ckeditor import upload_success, upload_fail
 
 
@@ -98,11 +101,3 @@ def upload():
     url = url_for('uploaded_files', filename=f.filename)
     # return upload_success call
     return upload_success(url, filename=f.filename)
-
-
-'''
-@app.context_processor
-def utility_processor():
-    price = "price"
-    return dict(price=price)
-'''

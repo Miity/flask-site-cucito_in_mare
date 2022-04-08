@@ -9,3 +9,8 @@ class UserForm(FlaskForm):
     email = StringField('Email', validators=[Email()])
     roles = StringField('Email', validators=[Email()])
     submit = SubmitField('Submit')
+
+
+class SiteForm(FlaskForm):
+    logo = FileField('Site Logo')
+    submit = SubmitField('Submit')
