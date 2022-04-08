@@ -25,3 +25,9 @@ from models import Users, Role
 user_datastore = SQLAlchemyUserDatastore(db, Users, Role)
 security = Security(app, user_datastore)
 
+
+@app.context_processor
+def utility_processor():
+    logo = 'logo.jpg'
+    site_name = 'Tappezzeria Nautica "Cucito in Mare"'
+    return dict(logo=logo, site_name=site_name)
