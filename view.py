@@ -74,7 +74,7 @@ def userdelete(id):
 @app.route('/admin/site_set', methods=['GET', 'POST'])
 def site_set():
     form = SiteForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and form.logo.data:
         path_to_save = os.path.join(app.config['UPLOAD_FOLDER'], 'main_set')
         save_img(form.logo.data, path_to_save, 'logo.jpg')
     return render_template('blog/site_set.html', form=form)

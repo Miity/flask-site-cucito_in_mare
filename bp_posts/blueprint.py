@@ -27,6 +27,14 @@ def index():
                            tags=Tag.query.all())
 
 
+def post_update(post, form):
+    tag = Tag.query.filter_by(name=form.tags.data)
+    post.title = form.title.data
+    post.body = form.body.data
+    post.short_desc = form.short_desc.data
+    post.tags = list(tag)
+
+
 @posts.route('/create_post', methods=['GET', 'POST'])
 @login_required
 def create_post():
@@ -34,39 +42,42 @@ def create_post():
     if form.validate_on_submit():
         post_slug = Post.query.filter_by(slug=slugify(form.title.data)).first()
         if post_slug is None:
-            tag = Tag.query.filter_by(name=form.tags.data)
-            post = Post(title=form.title.data,
-                        body=form.body.data,
-                        short_desc=form.short_desc.data, tags=list(tag))
-            db.session.add(post)
-            db.session.commit()
-
-            post = Post.query.filter_by(slug=slugify(form.title.data)).first()
+            post = Post()
+            post_update(post, form)
             # SAVE FILE
             if form.thumbnail.data:
-                save_img(form.thumbnail.data, post.path_to_save())
-                # commit filename in db
                 filename = secure_filename(form.thumbnail.data.filename)
                 post.thumbnail = filename
-                db.session.commit()
-
+                save_img(form.thumbnail.data, post.path_to_save())
+                flash('Image added')
+            db.session.add(post)
+            db.session.commit()
             flash('Post added succefully')
-
-            # Clear the form
-            form.title.data = ''
-            form.body.data = ''
         else:
             flash('This slug is in database. Write another Slug')
-    return render_template(
-        'posts_admin/create_post.html',
-        form=form,
-        posts=Post.query.all())
+    return redirect_to_index()
 
 
-@posts.route('/<id>/edit', methods=['GET', 'POST'])
+@posts.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_post(id):
-    pass
+    post = Post.query.get(id)
+    if request.method == "POST":
+        form = PostForm(obj=post)
+        if form.validate_on_submit():
+            post_update(post, form)
+            if form.thumbnail.data != post.thumbnail:
+                save_img(form.thumbnail.data, post.path_to_save())
+                filename = secure_filename(form.thumbnail.data.filename)
+                post.thumbnail = filename
+            db.session.commit()
+            flash('Post updated succefully')
+        return redirect_to_index()
+    form = PostForm(obj=post)
+    return render_template('posts_admin/edit_post.html',
+                           post=post,
+                           form=form,
+                           )
 
 
 @posts.route('/delete/<int:id>')
