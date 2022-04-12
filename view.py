@@ -80,7 +80,7 @@ def site_set():
     return render_template('blog/site_set.html', form=form)
 
 
-@app.route('/<path:slug>/<path:filename>')
+@app.route('/upload/posts/<path:slug>/<path:filename>')
 def download_post_image(slug, filename):
     path = os.path.join(app.config['UPLOAD_FOLDER'], 'posts', slug)
     return send_from_directory(path, filename, as_attachment=True)
