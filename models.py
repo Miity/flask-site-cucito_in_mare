@@ -91,6 +91,7 @@ class Post(db.Model, RoleMixin):
         kwargs['slug'] = slugify(kwargs.get('title'))
         super(Post, self).__init__(**kwargs)
 
+
 '''
 class SiteSet():
     site_logo = db.Column(db.String(80), nullable=True)

@@ -25,7 +25,7 @@ def page_not_found_405(error):
     return render_template('page_not_found.html')
 
 
-# def users
+# Admin
 
 @app.route('/users')
 @login_required
@@ -33,7 +33,7 @@ def all_users():
     users = Users.query.all()
     return render_template('users/users.html', users=users)
 
-
+'''
 @app.route('/users/create_user', methods=['GET', 'POST'])
 @login_required
 def create_user():
@@ -68,9 +68,9 @@ def userdelete(id):
     except:
         flash('error')
         return render_template('add_user.html', form=form, name=name)
+'''
 
 
-# Admin
 @app.route('/admin/site_set', methods=['GET', 'POST'])
 def site_set():
     form = SiteForm()

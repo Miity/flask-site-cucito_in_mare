@@ -33,23 +33,31 @@
 {% if all_posts %}
 <div class="row">
   {% for post in all_posts %}
+    {% if post.thumbnail %}
+    <div class="my-2 col-sm-6 col-md-3 filterDiv {% if post.tags[0] %}{{ post.tags[0].name }} {% endif %} ">
 
-  <div class="my-2 col-sm-6 col-md-3 filterDiv {% if post.tags[0] %}{{ post.tags[0].name }} {% endif %} ">
-    <div class="card bg-light h-100 ">
-      {% if post.thumbnail %}
-      <img src="{{ url_for('download_post_image', slug=post.slug ,filename=post.thumbnail) }}" class="card-img-top thumb" alt="{{ post.title }}">
-      {% endif %}
-      <div class="card-body">
-        <h2>{{ post.title }}</h2>
-        {% if post.short_desc %}
-        <p class="card-text">{{ post.short_desc}}</p>
-        {% elif post.body%}
-        <p class="card-text">{{ post.body|truncate(250)|safe}}</p>
-        {% endif %}
+      <div class="card bg-light h-100 ">
+        <img src="{{ url_for('download_post_image', slug=post.slug ,filename=post.thumbnail) }}" class="card-img-top thumb" alt="{% if post.tags[0] %}{{ post.tags[0].name }} {% endif %} nautica ">
+
+        <div class="card-body">
+          <h2>{{ post.title }}</h2>
+        </div>
       </div>
     </div>
-  </div>
-  
+    {% else %}
+    <div class="my-2 col-sm-6 col-md-3 filterDiv {% if post.tags[0] %}{{ post.tags[0].name }} {% endif %} ">
+      <div class="card bg-light h-100 ">
+        <div class="card-body">
+          <h2>{{ post.title }}</h2>
+          {% if post.short_desc %}
+          <p class="card-text">{{ post.short_desc}}</p>
+          {% elif post.body%}
+          <p class="card-text">{{ post.body|truncate(250)|safe}}</p> 
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
   {% endfor %}
 </div>
 {% endif %}

@@ -81,22 +81,14 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 <table class="table">
   <thead>
     <tr>
       <th scope="col">id</th>
+      <th scope="col">order num</th>
       <th scope="col">slug</th>
       <th scope="col">title</th>
+      <th scope="col">tags</th>
     </tr>
   </thead>
 <tbody>
@@ -104,7 +96,7 @@
 {% for post in posts %}
 	{% if post.archive != True %}
     <tr>
-      <td>{{ post.id }}</td>
+      <td>{{ post.id }}</td>  
       <td>{{ post.slug }}</td>
       <td>{{ post.title }}</td>
       <td>
@@ -146,7 +138,7 @@
       </td>
       <td>
         {% if post.thumbnail %}
-        <img src="{{ post.path_to_thumbnail() }}" height="30px">
+        <img src="{{ url_for('download_post_image', slug=post.slug ,filename=post.thumbnail) }}" height="30px">
         {% endif %}
       </td>
       <td>

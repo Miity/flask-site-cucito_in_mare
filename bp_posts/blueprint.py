@@ -20,19 +20,20 @@ def redirect_to_index():
     )
 
 
-@posts.route('/')
-def index():
-    return render_template('posts_admin/index.html',
-                           posts=Post.query.all(),
-                           tags=Tag.query.all())
-
-
 def post_update(post, form):
     tag = Tag.query.filter_by(name=form.tags.data)
     post.title = form.title.data
     post.body = form.body.data
     post.short_desc = form.short_desc.data
     post.tags = list(tag)
+    return post
+
+
+@posts.route('/')
+def index():
+    return render_template('posts_admin/index.html',
+                           posts=Post.query.all(),
+                           tags=Tag.query.all())
 
 
 @posts.route('/create_post', methods=['GET', 'POST'])
@@ -42,8 +43,8 @@ def create_post():
     if form.validate_on_submit():
         post_slug = Post.query.filter_by(slug=slugify(form.title.data)).first()
         if post_slug is None:
-            post = Post()
-            post_update(post, form)
+            post = Post(title=form.title.data)
+            post = post_update(post, form)
             # SAVE FILE
             if form.thumbnail.data:
                 filename = secure_filename(form.thumbnail.data.filename)
@@ -53,9 +54,10 @@ def create_post():
             db.session.add(post)
             db.session.commit()
             flash('Post added succefully')
+            return redirect_to_index()
         else:
             flash('This slug is in database. Write another Slug')
-    return redirect_to_index()
+    return render_template('/posts_admin/create_post.html', form=form)
 
 
 @posts.route('/<int:id>/edit', methods=['GET', 'POST'])
@@ -84,8 +86,10 @@ def edit_post(id):
 @login_required
 def delete_post(id):
     post_delete = Post.query.get_or_404(id)
+
     if post_delete.archive == True:
         try:
+            os.system("rm -r static/upload/posts/" + post_delete.slug)
             db.session.delete(post_delete)
             db.session.commit()
             flash("post deleted")
