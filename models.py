@@ -85,7 +85,7 @@ class Image(db.Model):
 
     def __init__(self, **kwargs):
         kwargs['archive'] = False
-        super(Post, self).__init__(**kwargs)
+        super(Image, self).__init__(**kwargs)
 
 
 class Gallery():
