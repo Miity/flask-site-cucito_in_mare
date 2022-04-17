@@ -171,6 +171,7 @@ def create_image():
     if form.validate_on_submit():
         tag = Tag.query.filter_by(name=form.tags.data)
         image = Image(alt=form.alt.data, tags=list(tag))
+        print(dir(ImageForm()))
         # SAVE FILE
         if form.image.data:
             filename = secure_filename(form.image.data.filename)
@@ -179,7 +180,7 @@ def create_image():
             flash('Image added')
         db.session.add(image)
         db.session.commit()
-        return redirect_to_index()
+        return redirect(url_for('posts.all_images', images=Image.query.all()))
     return render_template('posts_admin/create_image.html', form=form)
 
 
@@ -193,15 +194,14 @@ def download_image(filename):
 @login_required
 def edit_image(id):
     image = Image.query.get(id)
-    if request.method == "POST":
-        form = ImageForm(obj=image)
-        if form.validate_on_submit():
-            tag = Tag.query.filter_by(name=form.tags.data)
-            image = Image(alt=form.alt.data, tags=list(tag))
-            db.session.commit()
-            flash('Image updated succefully')
-        return redirect_to_index()
-    form = ImageForm(obj=image)
+    form = ImageForm(alt=image.alt, tags=image.tags[0])
+    if form.validate_on_submit():
+        tag = Tag.query.filter_by(name=form.tags.data)
+        image.alt = form.alt.data
+        image.tag = list(tag)
+        db.session.commit()
+        flash('Image updated succefully')
+        return redirect(url_for('posts.all_images', images=Image.query.all()))
     return render_template('posts_admin/create_image.html',
                            form=form,
                            )

@@ -16,7 +16,11 @@
 		<form method="POST"  enctype="multipart/form-data" >
 			<div class="mb-3">
 				{{ form.hidden_tag() }}
+
+				{% if request.path == '/admin/create_image' %}
 				<p>{{ form.image.label(class="form-label") }} {{ form.image(class="form-control") }}</p>
+				{% endif %}
+
 				<p>{{ form.alt.label(class="form-label") }} {{ form.alt(class="form-control", required='required') }}</p>
 				<p>{{ form.tags.label(class="form-label") }} {{ form.tags(class="form-select") }}</p> 
 				<p>{{ form.submit(class="btn btn-primary") }}</p> 
