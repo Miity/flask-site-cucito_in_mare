@@ -1,0 +1,31 @@
+{% extends 'base_admin.html' %}
+
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+<div class="alert alert-primary" role="alert">
+	{{ message }}
+</div>
+{% endfor %}
+
+
+<div class="row justify-content-center">
+	<div class="col-8 ">
+
+		<h1>New Image</h1>
+		<form method="POST"  enctype="multipart/form-data" >
+			<div class="mb-3">
+				{{ form.hidden_tag() }}
+				<p>{{ form.image.label(class="form-label") }} {{ form.image(class="form-control") }}</p>
+				<p>{{ form.alt.label(class="form-label") }} {{ form.alt(class="form-control", required='required') }}</p>
+				<p>{{ form.tags.label(class="form-label") }} {{ form.tags(class="form-select") }}</p> 
+				<p>{{ form.submit(class="btn btn-primary") }}</p> 
+			</div>
+		</form>
+
+	</div>
+
+	{% endblock %}
+
+
+

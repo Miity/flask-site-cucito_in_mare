@@ -12,10 +12,9 @@
 
 
 
-
 {% if tags %}
 <!-- Control buttons -->
-<div class="row my-5">
+<div class="row mt-5 mb-2">
   <center>
     <div class="col">
       <button class="btn btn-outline-primary" onclick="filterSelection('all')">all</button>
@@ -30,23 +29,35 @@
 {% endif %}
 
 
-{% if all_posts %}
+{% if images %}
 <div class="row">
-  {% for post in all_posts %}
-    {% if post.thumbnail %}
-    <div class="my-2 col-sm-6 col-md-3 filterDiv {% if post.tags[0] %}{{ post.tags[0].name }} {% endif %} ">
+
+  {% for image in images %}
+    <div class="my-2 col-sm-6 col-md-3 filterDiv {% if image.tags[0] %}{{ image.tags[0].name }} {% endif %} ">
 
       <div class="card bg-light h-100 ">
-        <img src="{{ url_for('download_post_image', slug=post.slug ,filename=post.thumbnail) }}" class="card-img-top thumb" alt="{% if post.tags[0] %}{{ post.tags[0].name }} {% endif %} nautica ">
-
-        <div class="card-body">
-          <h2>{{ post.title }}</h2>
-        </div>
+        <a href="{{ url_for('posts.download_image', filename=image.name) }}" data-toggle="lightbox" data-gallery="example-gallery">
+          <img src="{{ url_for('posts.download_image', filename=image.name) }}" class="card-img-top thumb" alt="">
+        </a>
       </div>
     </div>
-    {% else %}
-    <div class="my-2 col-sm-6 col-md-3 filterDiv {% if post.tags[0] %}{{ post.tags[0].name }} {% endif %} ">
+  {% endfor %}
+</div>
+{% endif %}
+
+
+
+{% if all_posts %}
+<div class="row">
+
+  {% for post in all_posts %}
+    
+    <div class="my-5 col-sm-12 col-md-3">
+
       <div class="card bg-light h-100 ">
+      {% if post.thumbnail %}
+          <img src="{{ url_for('download_post_image', slug=post.slug ,filename=post.thumbnail) }}" class="card-img-top thumb" alt="{% if post.tags[0] %}{{ post.tags[0].name }} {% endif %} nautica ">
+      {% endif %}
         <div class="card-body">
           <h2>{{ post.title }}</h2>
           {% if post.short_desc %}
@@ -57,66 +68,10 @@
         </div>
       </div>
     </div>
-    {% endif %}
+    
   {% endfor %}
 </div>
 {% endif %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<script type="text/javascript">
-
-  filterSelection("all")
-  function filterSelection(c) {
-    var x, i;
-    x = document.getElementsByClassName("filterDiv");
-    if (c == "all") c = "";
-  // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
-  for (i = 0; i < x.length; i++) {
-    w3RemoveClass(x[i], "d-none");
-    if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "d-none");
-  }
-}
-
-// Hide elements that are not selected
-function w3RemoveClass(element, name) {
-  var i, arr1, arr2;
-  arr1 = element.className.split(" ");
-  arr2 = name.split(" ");
-  for (i = 0; i < arr2.length; i++) {
-    if (arr1.indexOf(arr2[i]) == -1) {
-      element.className += " " + arr2[i];
-    }
-  }
-}
-
-// Show filtered elements
-function w3AddClass(element, name) {
-  var i, arr1, arr2;
-  arr1 = element.className.split(" ");
-  arr2 = name.split(" ");
-  for (i = 0; i < arr2.length; i++) {
-    while (arr1.indexOf(arr2[i]) > -1) {
-      arr1.splice(arr1.indexOf(arr2[i]), 1); 
-    }
-  }
-  element.className = arr1.join(" ");
-}
-
-</script>
-
-
 {% endblock %}
+

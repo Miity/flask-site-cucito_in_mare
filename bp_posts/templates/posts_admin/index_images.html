@@ -1,0 +1,52 @@
+{% extends 'base_admin.html' %}
+
+
+{% block content %}
+<div class="row justify-content-center">
+	<div class="col-10 ">
+
+{% for message in get_flashed_messages() %}
+<div class="alert alert-primary" role="alert">
+  {{ message }}
+</div>
+{% endfor %}
+
+
+
+<a href="{{ url_for('posts.create_image')}}" type="button" class="btn btn-success">    
+                New Image
+</a>
+
+<div class="row my-5">
+  
+
+    {% for image in images %}
+    <div class="col-sm-4 col-md-3">
+    <div class="card {% if image.archive == True %}  text-white bg-secondary {% endif %}">
+      <img src="{{ url_for('posts.download_image', filename=image.name)}}" class="card-img-top">
+      <div class="card-body">
+        <p class="card-text"> 
+          <b>filename:</b> {{image.name}} <br>
+          <b>alt:</b> {{ image.alt }} <br>
+          <b>tag:</b> {{ image.tags[0].name }}
+        </p>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          {% if image.archive == True %} 
+          <a href="{{ url_for('posts.publish_image', id=image.id)}}" class="btn btn-primary btn-sm">publish</a>
+          {% endif %}
+          <a href="{{ url_for('posts.edit_image', id=image.id)}}" class="btn btn-outline-primary btn-sm">edit</a>
+          <a href="{{ url_for('posts.delete_image', id=image.id)}}" class="btn btn-outline-danger btn-sm">delete</a>
+        </div>
+       
+        
+      </div>
+    </div>
+    </div>
+    {%endfor%}
+  
+</div>
+
+
+
+
+{% endblock %}

@@ -3,8 +3,10 @@
   <div class="container d-flex flex-wrap">
     <ul class="nav me-auto">
       <li class="nav-item"><a href="{{url_for('all_users')}}" class="nav-link link-dark px-2">users</a></li>
-      <li class="nav-item"><a href="{{url_for('posts.index')}}" class="nav-link link-dark px-2">blog</a></li>
+      <li class="nav-item"><a href="{{url_for('posts.index')}}" class="nav-link link-dark px-2">posts</a></li>
+      <li class="nav-item"><a href="{{url_for('posts.all_images')}}" class="nav-link link-dark px-2">Images</a></li>
       <li class="nav-item"><a href="{{url_for('site_set')}}" class="nav-link link-dark px-2">site_set</a></li>
+      
     </ul>
   </div>
 </nav>
@@ -22,35 +24,12 @@
       </ul>
 
 
-<ul class="nav"> 
-        <li> <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+      <ul class="nav"> 
+        <li> <button type="button" class="btn btn-lg btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
           Video about us
         </button></li>
       </ul>
-      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" method="GET">
-        <input type="search" class="form-control" placeholder="Search..." aria-label="Search" name="q" value="{{ request.args.get('q','') }}">
-      </form>
-
-
-
-
-        {% if current_user.is_active == False %}
-
-<ul class="nav"> 
-        <li class="nav-item"><a href="/login" class="nav-link link-dark px-2">Login</a></li>
-      </ul>
-
-        {% else %}
-
-      <div class="dropdown text-end">
-        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-        </a>
-
-        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-          <li><a class="dropdown-item" href="/logout">Sign out</a></li>
-        </ul>
-      </div>
-      {% endif %}
+     
     </div>
   </div>
 </header>

@@ -16,6 +16,14 @@ class PostForm(FlaskForm):
     short_desc = StringField('short_desc', widget=TextArea())
     body = CKEditorField('Body', widget=TextArea())
     thumbnail = FileField('Thumbnail',)
+    video_url = StringField('Video URL')
+    tags = SelectField('Tags', choices=tag_choises)
+    submit = SubmitField('Submit')
+
+
+class ImageForm(FlaskForm):
+    image = FileField('Image')
+    alt = StringField('Alt')
     tags = SelectField('Tags', choices=tag_choises)
     submit = SubmitField('Submit')
 

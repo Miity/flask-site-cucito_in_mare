@@ -20,6 +20,13 @@ post_tags = db.Table('post_tags',
                          'tag.id'), primary_key=True)
                      )
 
+image_tags = db.Table('image_tags',
+                      db.Column('image_id', db.Integer, db.ForeignKey(
+                          'image.id'), primary_key=True),
+                      db.Column('tag_id', db.Integer, db.ForeignKey(
+                          'tag.id'), primary_key=True)
+                      )
+
 
 class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -60,6 +67,27 @@ class Tag(db.Model):
         super(Tag, self).__init__(**kwargs)
 
 
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=True)
+    alt = db.Column(db.String(80))
+    tags = db.relationship('Tag', secondary=image_tags,
+                           backref=db.backref('image', lazy='dynamic'),
+                           cascade="save-update")
+    archive = db.Column(db.Boolean)
+
+    def path_to_save(self):
+        path = str(os.path.join('static', 'upload', 'images'))
+        return path
+
+    def __repr__(self):
+        return self.name
+
+
+class Gallery():
+    pass
+
+
 class Post(db.Model, RoleMixin):
     id = db.Column(db.Integer, primary_key=True)
     slug = db.Column(db.String(80), unique=True)
@@ -68,19 +96,15 @@ class Post(db.Model, RoleMixin):
     body = db.Column(db.Text, nullable=True)
     pub_date = db.Column(db.DateTime, nullable=False,
                          default=datetime.utcnow)
-    thumbnail = db.Column(db.String(80), nullable=True)
     archive = db.Column(db.Boolean)
+    thumbnail = db.Column(db.String(80), nullable=True)
+    video_url = db.Column(db.String(80), nullable=True)
     tags = db.relationship('Tag', secondary=post_tags,
-                           backref=db.backref('post', lazy='dynamic'), cascade="save-update")
+                           backref=db.backref('post', lazy='dynamic'),
+                           cascade="save-update")
 
     def path_to_save(self):
         path = str(os.path.join('static', 'upload', 'posts', str(self.slug)))
-        return path
-
-    def path_to_thumbnail(self):
-        path = str(os.path.join(
-            app.config['UPLOAD_FOLDER'], 'posts', str(self.slug)))
-        path = str(os.path.join(path, self.thumbnail))
         return path
 
     def __repr__(self):

@@ -21,13 +21,11 @@
     
   </head>
   <body>   
-    <main>
-      <div class="container">
+    <main class="container">
         {% include 'nav.html' %}
         {% block header %}{% endblock %}
         {% block content %}{% endblock %}
         {% include 'footer.html' %} 
-      </div>
     </main>
     {% include 'js.html' %}    
   </body>

@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, flash, request, redirect, url_for
-from .forms import PostForm, TagForm
-from models import Post, Tag
+from flask import Blueprint, render_template, flash, request, redirect, url_for, send_from_directory
+from .forms import PostForm, TagForm, ImageForm
+from models import Post, Tag, Image
 from flask_security import login_required
 from werkzeug.utils import secure_filename
 import os
@@ -8,7 +8,7 @@ from slugify import slugify
 from utils import save_img
 
 
-from app import db
+from app import app, db
 
 posts = Blueprint('posts', __name__, template_folder='templates')
 
@@ -16,7 +16,8 @@ posts = Blueprint('posts', __name__, template_folder='templates')
 def redirect_to_index():
     return redirect(url_for(
         'posts.index',
-        posts=Post.query.all(), tags=Tag.query.all())
+        posts=Post.query.all(),
+        tags=Tag.query.all())
     )
 
 
@@ -26,6 +27,7 @@ def post_update(post, form):
     post.body = form.body.data
     post.short_desc = form.short_desc.data
     post.tags = list(tag)
+    post.video_url = form.video_url.data
     return post
 
 
@@ -33,7 +35,8 @@ def post_update(post, form):
 def index():
     return render_template('posts_admin/index.html',
                            posts=Post.query.all(),
-                           tags=Tag.query.all())
+                           tags=Tag.query.all()
+                           )
 
 
 @posts.route('/create_post', methods=['GET', 'POST'])
@@ -86,7 +89,6 @@ def edit_post(id):
 @login_required
 def delete_post(id):
     post_delete = Post.query.get_or_404(id)
-
     if post_delete.archive == True:
         try:
             os.system("rm -r static/upload/posts/" + post_delete.slug)
@@ -94,7 +96,6 @@ def delete_post(id):
             db.session.commit()
             flash("post deleted")
             return redirect_to_index()
-
         except:
             flash('error')
             return redirect_to_index()
@@ -131,7 +132,7 @@ def create_tag():
 @login_required
 def delete_tag(id):
     tag_delete = Tag.query.get_or_404(id)
-    if tag_delete.archive == True:
+    if tag_delete.archive:
         try:
             db.session.delete(tag_delete)
             db.session.commit()
@@ -154,3 +155,78 @@ def publish_tag(id):
     tag.archive = False
     db.session.commit()
     return redirect_to_index()
+
+
+# Image
+@posts.route('/images')
+def all_images():
+    return render_template('posts_admin/index_images.html',
+                           images=Image.query.all())
+
+
+@posts.route('/create_image', methods=['GET', 'POST'])
+@login_required
+def create_image():
+    form = ImageForm()
+    if form.validate_on_submit():
+        tag = Tag.query.filter_by(name=form.tags.data)
+        image = Image(alt=form.alt.data, tags=list(tag))
+        # SAVE FILE
+        if form.image.data:
+            filename = secure_filename(form.image.data.filename)
+            image.name = filename
+            save_img(form.image.data, image.path_to_save())
+            flash('Image added')
+        db.session.add(image)
+        db.session.commit()
+        return redirect_to_index()
+    return render_template('posts_admin/create_image.html', form=form)
+
+
+@posts.route('/images/<path:filename>')
+def download_image(filename):
+    path = os.path.join(app.config['UPLOAD_FOLDER'], 'images')
+    return send_from_directory(path, filename, as_attachment=True)
+
+
+@posts.route('/image_<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_image(id):
+    image = Image.query.get(id)
+    if request.method == "POST":
+        form = ImageForm(obj=image)
+        if form.validate_on_submit():
+            tag = Tag.query.filter_by(name=form.tags.data)
+            image = Image(alt=form.alt.data, tags=list(tag))
+            db.session.commit()
+            flash('Image updated succefully')
+        return redirect_to_index()
+    form = ImageForm(obj=image)
+    return render_template('posts_admin/create_image.html',
+                           form=form,
+                           )
+
+
+@posts.route('/image_<int:id>/delete')
+@login_required
+def delete_image(id):
+    image_del = Image.query.get_or_404(id)
+    if image_del.archive:
+        os.system("rm static/upload/images/" + image_del.name)
+        db.session.delete(image_del)
+        db.session.commit()
+        flash("image deleted")
+        return redirect(url_for('posts.all_images', images=Image.query.all()))
+    else:
+        image_del.archive = True
+        db.session.commit()
+        return redirect(url_for('posts.all_images', images=Image.query.all()))
+
+
+@posts.route('/publish_image/<int:id>')
+@login_required
+def publish_image(id):
+    image = Image.query.get_or_404(id)
+    image.archive = False
+    db.session.commit()
+    return redirect(url_for('posts.all_images', images=Image.query.all()))

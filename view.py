@@ -1,9 +1,9 @@
-from app import app, db
-from flask import render_template, flash, request, url_for, send_from_directory
-from forms import UserForm, SiteForm
+from app import app
+from flask import render_template, request, url_for, send_from_directory
+from forms import SiteForm
 from models import Users
 from flask_security import login_required
-from models import Post, Tag
+from models import Post, Tag, Image
 import os
 from utils import save_img
 
@@ -12,7 +12,8 @@ from utils import save_img
 def index():
     tags = Tag.query.filter_by(archive=False).all()
     posts = Post.query.filter_by(archive=False).all()
-    return render_template("blog/index.html", all_posts=posts, tags=tags)
+    images = Image.query.filter_by(archive=False).all()
+    return render_template("blog/index.html", all_posts=posts, tags=tags, images=images)
 
 
 @app.errorhandler(404)
@@ -32,43 +33,6 @@ def page_not_found_405(error):
 def all_users():
     users = Users.query.all()
     return render_template('users/users.html', users=users)
-
-'''
-@app.route('/users/create_user', methods=['GET', 'POST'])
-@login_required
-def create_user():
-    name = None
-    form = UserForm()
-    if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.email.data).first()
-        name = form.username.data
-        if user is None:
-            user = Users(username=form.username.data, email=form.email.data)
-            db.session.add(user)
-            db.session.commit()
-            form.username.data = ''
-            form.email.data = ''
-            flash('user added succefully')
-        else:
-            flash('This user is in database. Write another Email')
-    return render_template('users/create_user.html', form=form, name=name, all_users=Users.query.all())
-
-
-@app.route('/user/<int:id>')
-@login_required
-def userdelete(id):
-    name = None
-    form = UserForm()
-    user_delete = Users.query.get_or_404(id)
-    try:
-        db.session.delete(user_delete)
-        db.session.commit()
-        flash("user deleted")
-        return render_template('add_user.html', form=form, name=name, all_users=Users.query.all())
-    except:
-        flash('error')
-        return render_template('add_user.html', form=form, name=name)
-'''
 
 
 @app.route('/admin/site_set', methods=['GET', 'POST'])
