@@ -198,7 +198,7 @@ def edit_image(id):
     if form.validate_on_submit():
         tag = Tag.query.filter_by(name=form.tags.data)
         image.alt = form.alt.data
-        image.tag = list(tag)
+        image.tags = list(tag)
         db.session.commit()
         flash('Image updated succefully')
         return redirect(url_for('posts.all_images', images=Image.query.all()))
