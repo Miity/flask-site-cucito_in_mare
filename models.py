@@ -83,6 +83,10 @@ class Image(db.Model):
     def __repr__(self):
         return self.name
 
+    def __init__(self, **kwargs):
+        kwargs['archive'] = False
+        super(Post, self).__init__(**kwargs)
+
 
 class Gallery():
     pass
