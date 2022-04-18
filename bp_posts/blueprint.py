@@ -184,7 +184,7 @@ def create_image():
     return render_template('posts_admin/create_image.html', form=form)
 
 
-@posts.route('/images/<path:filename>')
+@posts.route('/images/1024/<path:filename>')
 def download_image(filename):
     path = os.path.join(app.config['UPLOAD_FOLDER'], 'images')
     return send_from_directory(path, filename, as_attachment=True)

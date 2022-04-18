@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+
 {% if current_user.has_role('admin') %}
 <nav class="py-2 bg-light border-bottom">
   <div class="container d-flex flex-wrap">
@@ -24,11 +33,6 @@
       </ul>
 
 
-      <ul class="nav"> 
-        <li> <button type="button" class="btn btn-lg btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-          Video about us
-        </button></li>
-      </ul>
      
     </div>
   </div>
@@ -37,25 +41,4 @@
 
 
 
-<!-- Modal -->
-<div class="modal  fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Video about us</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
 
-        <center>
-          <iframe width="100%" height="315" src="https://www.youtube.com/embed/Syc6pCqvKXQ?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </center>  
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
