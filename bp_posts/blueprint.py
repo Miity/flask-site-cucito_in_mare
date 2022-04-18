@@ -190,6 +190,12 @@ def download_image(filename):
     return send_from_directory(path, filename, as_attachment=True)
 
 
+@posts.route('/images/600/<path:filename>')
+def download_image_thumb(filename):
+    path = os.path.join(app.config['UPLOAD_FOLDER'], 'images')
+    return send_from_directory(path, filename, as_attachment=True)
+
+
 @posts.route('/image_<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_image(id):
