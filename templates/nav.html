@@ -1,21 +1,11 @@
-
-
-
-
-
-
-
-
-
 {% if current_user.has_role('admin') %}
 <nav class="py-2 bg-light border-bottom">
   <div class="container d-flex flex-wrap">
     <ul class="nav me-auto">
-      <li class="nav-item"><a href="{{url_for('all_users')}}" class="nav-link link-dark px-2">users</a></li>
-      <li class="nav-item"><a href="{{url_for('posts.index')}}" class="nav-link link-dark px-2">posts</a></li>
-      <li class="nav-item"><a href="{{url_for('posts.all_images')}}" class="nav-link link-dark px-2">Images</a></li>
-      <li class="nav-item"><a href="{{url_for('site_set')}}" class="nav-link link-dark px-2">site_set</a></li>
-      
+      <li class="nav-item"><a href="{{url_for('all_users')}}" class="nav-link link-dark px-2">Users</a></li>
+      <li class="nav-item"><a href="{{url_for('posts.index')}}" class="nav-link link-dark px-2">Posts</a></li>
+      <li class="nav-item"><a href="{{url_for('posts.all_images')}}" class="nav-link link-dark px-2">Gallery</a></li>
+      <li class="nav-item"><a href="{{url_for('site_set')}}" class="nav-link link-dark px-2">Site Settings</a></li>
     </ul>
   </div>
 </nav>
@@ -26,14 +16,11 @@
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
-      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="{{url_for('index')}}" class="nav-link px-2 link-secondary">Nostri lavori</a></li>
-        <li><a href="{{url_for('index')}}#testimonianze" class="nav-link px-2 link-dark">Testimonianze</a></li>
-        <li><a href="{{url_for('index')}}#contatti" class="nav-link px-2 link-dark">Contatti</a></li>
+      <ul class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+        <a href="{{url_for('index')}}" class="me-3 py-2 text-dark text-decoration-none">Nostri lavori</a>
+        <a href="{{url_for('index')}}#testimonianze" class="me-3 py-2 text-dark text-decoration-none">Recensioni</a>
+        <a href="{{url_for('index')}}#contatti" class="me-3 py-2 text-dark text-decoration-none">Contatti</a>
       </ul>
-
-
-     
     </div>
   </div>
 </header>

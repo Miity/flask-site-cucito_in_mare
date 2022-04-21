@@ -3,6 +3,7 @@
 /* Padding below the footer and lighter body text */
 
 body {
+  font-family: 'Roboto', sans-serif;
   color: #5a5a5a;
 }
 
@@ -19,4 +20,17 @@ a[type='button'] {
 .thumb{
   max-height: 300px;  
   object-fit: cover;
+}
+
+/* Footer
+-------------------------------------------------- */
+.text-white{
+  color: whitesmoke;
+}
+footer>div>a{
+  text-decoration: none;
+  color: #00cafc;
+}
+footer>div>a:hover{
+  color: gray;
 }
