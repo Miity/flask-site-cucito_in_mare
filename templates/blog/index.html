@@ -2,78 +2,25 @@
 
 {% block title %}{{ site_name }}{% endblock %}
 
-{% block content %}
 
-<div class="row">
-  <div class="col">
-    <img src="static/upload/main_set/{{ logo }}" class="img-fluid">
+{% block content %}
+<div itemscope itemtype="https://schema.org/Organization" >
+  <h1 class="d-none"><span itemprop="name">Cucito in Mare | Tappezzeria Nautica</span></h1>
+
+  <div class="row py-5 mb-5 justify-content-center" >
+      <div class="col-sm-12 col-md-6 text-center">
+
+        <img itemprop="logo" class="mb-4 img-fluid" src="static/upload/main_set/{{ logo }}" alt="Cucito in Mare | Tappezzeria nautica">
+
+      </div>
   </div>
 </div>
 
+{% include 'include/gallery.html' %}
 
+{% include 'include/posts.html' %}
 
-{% if tags %}
-<!-- Control buttons -->
-<div class="row mt-5 mb-2">
-  <center>
-    <div class="col">
-      <button class="btn btn-outline-primary" onclick="filterSelection('all')">all</button>
-      {% for tag in tags %}
-
-      <button class="btn btn-outline-primary" onclick="filterSelection('{{ tag.name }}')">{{ tag.name}}</button>
-
-      {% endfor %}  
-    </div>
-  </center>
-</div>
-{% endif %}
-
-
-{% if images %}
-<div class="row">
-
-  {% for image in images %}
-    <div class="my-2 col-sm-6 col-md-3 filterDiv {% if image.tags[0] %}{{ image.tags[0].name }} {% endif %} ">
-
-      <div class="card bg-light h-100 ">
-        <a href="{{ url_for('posts.download_image', filename=image.name) }}" data-toggle="lightbox" data-gallery="example-gallery">
-          <img src="{{ url_for('posts.download_image_thumb', filename=image.name) }}" class="card-img-top thumb" alt="image.alt">
-        </a>
-      </div>
-    </div>
-  {% endfor %}
-</div>
-{% endif %}
-
-
-
-{% if all_posts %}
-<div class="row">
-
-  {% for post in all_posts %}
-    
-    <div class="my-5 col-sm-12 col-md-3">
-
-      <div class="card bg-light h-100 ">
-      {% if post.thumbnail %}
-          <img src="{{ url_for('download_post_image', slug=post.slug ,filename=post.thumbnail) }}" class="card-img-top thumb" alt="{% if post.tags[0] %}{{ post.tags[0].name }} {% endif %} nautica ">
-      {% endif %}
-        <div class="card-body">
-          <h2>{{ post.title }}</h2>
-          {% if post.short_desc %}
-          <p class="card-text">{{ post.short_desc}}</p>
-          {% elif post.body%}
-          <p class="card-text">{{ post.body|truncate(250)|safe}}</p> 
-          {% endif %}
-        </div>
-      </div>
-    </div>
-    
-  {% endfor %}
-</div>
-{% endif %}
-
-{% include 'Recensioni.html' %} 
+{% include 'include/recensioni.html' %} 
 
 {% endblock %}
 

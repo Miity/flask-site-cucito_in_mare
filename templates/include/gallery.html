@@ -1,0 +1,42 @@
+{% if tags %}
+<!-- Control buttons -->
+<div class="row mt-5 mb-2">
+  <center>
+    <div class="col">
+      <button class="btn btn-outline-primary" onclick="filterSelection('all')">all</button>
+      {% for tag in tags %}
+
+      <button class="btn btn-outline-primary" onclick="filterSelection('{{ tag.name }}')">{{ tag.name}}</button>
+
+      {% endfor %}  
+    </div>
+  </center>
+</div>
+{% endif %}
+
+
+{% if images %}
+<div class="row">
+
+  {% for image in images %}
+
+    <div class="my-2 col-sm-6 col-md-3 filterDiv {% if image.tags[0] %}{{ image.tags[0].name }} {% endif %} ">
+      <div class="card bg-light h-100 ">
+
+        <a href="{{ url_for('posts.download_image', filename=image.name) }}" data-toggle="lightbox" data-gallery="example-gallery">
+
+          <div itemscope itemtype="https://schema.org/Product">
+
+          <img itemprop="image" src="{{ url_for('posts.download_image_thumb', filename=image.name) }}" class="card-img-top thumb" alt="{{ image.alt }}">
+          <span itemprop="name" class="d-none">{{ image.alt }}</span>
+
+          </div>
+
+        </a>
+
+      </div>
+    </div>
+
+  {% endfor %}
+</div>
+{% endif %}
