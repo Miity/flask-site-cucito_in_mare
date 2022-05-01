@@ -30,14 +30,6 @@
             {{ role.name }}
           {% endfor %}
       </td>
-      <td>
-      {% if user.username != 'admin' %}
-      	<a type="button" class="btn btn-outline-danger" href="{{ url_for('userdelete', id=user.id ) }}">
-                
-                delete
-        </a>
-      {% endif %}
-    	</td>
     </tr>
 
 {% endfor %}
